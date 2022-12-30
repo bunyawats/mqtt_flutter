@@ -1,16 +1,12 @@
 # mqtt_flutter
 
-A new Flutter project.
+$ flutter pub add mqtt_client
 
-## Getting Started
+Android
+Add the following Android permissions to the AndroidManifest.xml file, located in android/app/src/main/AndroidManifest.xml:
 
-This project is a starting point for a Flutter application.
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[//]: # (connect to local machine)
+final client = MqttServerClient('10.0.2.2', '');
