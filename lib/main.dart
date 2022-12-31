@@ -1,6 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
+
 import 'services/mqtt_client.dart';
 
 void main() {
@@ -34,6 +34,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String _mqttMessage = "";
+  double _second = .0;
 
   @override
   void initState() {
@@ -44,7 +45,53 @@ class _MyHomePageState extends State<MyHomePage> {
   void _changeMqttMessage(String mqttMessage) {
     setState(() {
       _mqttMessage = mqttMessage;
+      _second = double.parse(mqttMessage);
     });
+  }
+
+  Widget _getRadialGauge() {
+    return SfRadialGauge(
+        title: const GaugeTitle(
+            text: 'Speedometer',
+            textStyle:
+                TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+        axes: <RadialAxis>[
+          RadialAxis(minimum: 0, maximum: 60, ranges: <GaugeRange>[
+            GaugeRange(
+                startValue: 0,
+                endValue: 50,
+                color: Colors.green,
+                startWidth: 10,
+                endWidth: 10),
+            GaugeRange(
+                startValue: 50,
+                endValue: 100,
+                color: Colors.orange,
+                startWidth: 10,
+                endWidth: 10),
+            GaugeRange(
+                startValue: 100,
+                endValue: 150,
+                color: Colors.red,
+                startWidth: 10,
+                endWidth: 10)
+          ], pointers: <GaugePointer>[
+            NeedlePointer(value: _second)
+          ], annotations: <GaugeAnnotation>[
+            GaugeAnnotation(
+                widget: Container(
+                  child: Text(
+                    _mqttMessage,
+                    style: const TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                angle: 90,
+                positionFactor: 0.5)
+          ])
+        ]);
   }
 
   @override
@@ -61,13 +108,14 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             const Text(
               instruction,
-              style: TextStyle( fontSize: 26),
+              style: TextStyle(fontSize: 26),
             ),
             const SizedBox(height: 25),
             Text(
               _mqttMessage,
               style: Theme.of(context).textTheme.headline4,
             ),
+            _getRadialGauge(),
           ],
         ),
       ),
