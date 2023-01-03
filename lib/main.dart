@@ -35,6 +35,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String _mqttMessage = "";
   double _second = .0;
+  List<bool> _isSelectedList = [false];
 
   @override
   void initState() {
@@ -49,12 +50,11 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Widget _getRadialGauge() {
+  Widget _buildRadialGauge() {
     return SfRadialGauge(
         title: const GaugeTitle(
             text: 'Speedometer',
-            textStyle:
-                TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+            textStyle: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
         axes: <RadialAxis>[
           RadialAxis(minimum: 0, maximum: 60, ranges: <GaugeRange>[
             GaugeRange(
@@ -90,8 +90,22 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 angle: 90,
                 positionFactor: 0.5)
-          ])
+          ]),
         ]);
+  }
+
+  ToggleButtons _buildToggleButtons() {
+    return ToggleButtons(
+      isSelected: _isSelectedList,
+      onPressed: (int index) {
+        setState(() {
+          _isSelectedList[index] = !_isSelectedList[index];
+        });
+      },
+      children: const <Widget>[
+        Icon(Icons.ac_unit),
+      ],
+    );
   }
 
   @override
@@ -115,7 +129,8 @@ class _MyHomePageState extends State<MyHomePage> {
               _mqttMessage,
               style: Theme.of(context).textTheme.headline4,
             ),
-            _getRadialGauge(),
+            _buildRadialGauge(),
+            _buildToggleButtons(),
           ],
         ),
       ),
