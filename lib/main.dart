@@ -33,24 +33,32 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _mqttMessage = "";
   double _second = .0;
-  final List<bool> _isSelectedList = [false];
+  final List<bool> _isSelectedList = [true];
 
   @override
   void initState() {
     super.initState();
-    startMqttListener(_changeMqttMessage);
+    connectMqttBroker().then((value) {
+      startSecondListener(_changeSecondMessage);
+      startToggleUpdateListener(_changeToggleState);
+    });
   }
 
-  void _changeMqttMessage(String mqttMessage) {
+  void _changeSecondMessage(double second) {
     setState(() {
-      _mqttMessage = mqttMessage;
-      _second = double.parse(mqttMessage);
+      _second = second;
+    });
+  }
+
+  void _changeToggleState(bool state) {
+    setState(() {
+      _isSelectedList[0] = state;
     });
   }
 
   Widget _buildRadialGauge() {
+    print("state: ${ _isSelectedList[0]}\n");
     return SizedBox(
       width: 200,
       height: 200,
@@ -85,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
               GaugeAnnotation(
                   widget: Container(
                     child: Text(
-                      _mqttMessage,
+                      "$_second",
                       style: const TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
