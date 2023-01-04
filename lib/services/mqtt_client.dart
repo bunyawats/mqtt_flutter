@@ -99,3 +99,12 @@ void onConnected() {
 void pong() {
   print('EXAMPLE::Ping response client callback invoked');
 }
+
+void publishToggleButtonState(bool state){
+  print("publishToggleButtonState: $state\n");
+
+  final builder = MqttClientPayloadBuilder();
+  builder.addString("publishToggleButtonState: $state\n");
+
+  client.publishMessage('test/toggle', MqttQos.exactlyOnce, builder.payload!);
+}

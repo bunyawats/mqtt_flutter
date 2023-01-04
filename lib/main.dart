@@ -63,19 +63,19 @@ class _MyHomePageState extends State<MyHomePage> {
             RadialAxis(minimum: 0, maximum: 60, ranges: <GaugeRange>[
               GaugeRange(
                   startValue: 0,
-                  endValue: 50,
+                  endValue: 20,
                   color: Colors.green,
                   startWidth: 10,
                   endWidth: 10),
               GaugeRange(
-                  startValue: 50,
-                  endValue: 100,
+                  startValue: 20,
+                  endValue: 40,
                   color: Colors.orange,
                   startWidth: 10,
                   endWidth: 10),
               GaugeRange(
-                  startValue: 100,
-                  endValue: 150,
+                  startValue: 40,
+                  endValue: 60,
                   color: Colors.red,
                   startWidth: 10,
                   endWidth: 10)
@@ -100,28 +100,23 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildToggleButtons() {
-    return OutlinedButton(
-      style: OutlinedButton.styleFrom(
-        shape: const RoundedRectangleBorder(),
-        side: const BorderSide(width: 2, color: Colors.red),
-      ),
-      onPressed: () {
-        setState(() {
-          _isSelectedList[0] = !_isSelectedList[0];
-        });
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: ToggleButtons(
-          isSelected: _isSelectedList,
-          onPressed: (int index) {},
-          children: const <Widget>[
-            Icon(
-              Icons.ac_unit,
-              size: 150,
-            ),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: ToggleButtons(
+        isSelected: _isSelectedList,
+        onPressed: (int index) {
+          setState(() {
+            _isSelectedList[index] = !_isSelectedList[index];
+          });
+          publishToggleButtonState(_isSelectedList[0]);
+        },
+        borderColor: Colors.blue,
+        children: const <Widget>[
+          Icon(
+            Icons.ac_unit,
+            size: 150,
+          ),
+        ],
       ),
     );
   }
@@ -138,15 +133,6 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              instruction,
-              style: TextStyle(fontSize: 26),
-            ),
-            const SizedBox(height: 25),
-            Text(
-              _mqttMessage,
-              style: Theme.of(context).textTheme.headline4,
-            ),
             _buildRadialGauge(),
             _buildToggleButtons(),
           ],
