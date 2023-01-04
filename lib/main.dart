@@ -35,7 +35,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String _mqttMessage = "";
   double _second = .0;
-  List<bool> _isSelectedList = [false];
+  final List<bool> _isSelectedList = [false];
 
   @override
   void initState() {
@@ -51,60 +51,78 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildRadialGauge() {
-    return SfRadialGauge(
-        title: const GaugeTitle(
-            text: 'Speedometer',
-            textStyle: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
-        axes: <RadialAxis>[
-          RadialAxis(minimum: 0, maximum: 60, ranges: <GaugeRange>[
-            GaugeRange(
-                startValue: 0,
-                endValue: 50,
-                color: Colors.green,
-                startWidth: 10,
-                endWidth: 10),
-            GaugeRange(
-                startValue: 50,
-                endValue: 100,
-                color: Colors.orange,
-                startWidth: 10,
-                endWidth: 10),
-            GaugeRange(
-                startValue: 100,
-                endValue: 150,
-                color: Colors.red,
-                startWidth: 10,
-                endWidth: 10)
-          ], pointers: <GaugePointer>[
-            NeedlePointer(value: _second)
-          ], annotations: <GaugeAnnotation>[
-            GaugeAnnotation(
-                widget: Container(
-                  child: Text(
-                    _mqttMessage,
-                    style: const TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
+    return SizedBox(
+      width: 200,
+      height: 200,
+      child: SfRadialGauge(
+          title: const GaugeTitle(
+              text: 'Seconds from MQTT',
+              textStyle:
+                  TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+          axes: <RadialAxis>[
+            RadialAxis(minimum: 0, maximum: 60, ranges: <GaugeRange>[
+              GaugeRange(
+                  startValue: 0,
+                  endValue: 50,
+                  color: Colors.green,
+                  startWidth: 10,
+                  endWidth: 10),
+              GaugeRange(
+                  startValue: 50,
+                  endValue: 100,
+                  color: Colors.orange,
+                  startWidth: 10,
+                  endWidth: 10),
+              GaugeRange(
+                  startValue: 100,
+                  endValue: 150,
+                  color: Colors.red,
+                  startWidth: 10,
+                  endWidth: 10)
+            ], pointers: <GaugePointer>[
+              NeedlePointer(value: _second)
+            ], annotations: <GaugeAnnotation>[
+              GaugeAnnotation(
+                  widget: Container(
+                    child: Text(
+                      _mqttMessage,
+                      style: const TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                angle: 90,
-                positionFactor: 0.5)
+                  angle: 90,
+                  positionFactor: 0.5)
+            ]),
           ]),
-        ]);
+    );
   }
 
-  ToggleButtons _buildToggleButtons() {
-    return ToggleButtons(
-      isSelected: _isSelectedList,
-      onPressed: (int index) {
+  Widget _buildToggleButtons() {
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(
+        shape: const RoundedRectangleBorder(),
+        side: const BorderSide(width: 2, color: Colors.red),
+      ),
+      onPressed: () {
         setState(() {
-          _isSelectedList[index] = !_isSelectedList[index];
+          _isSelectedList[0] = !_isSelectedList[0];
         });
       },
-      children: const <Widget>[
-        Icon(Icons.ac_unit),
-      ],
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: ToggleButtons(
+          isSelected: _isSelectedList,
+          onPressed: (int index) {},
+          children: const <Widget>[
+            Icon(
+              Icons.ac_unit,
+              size: 150,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
